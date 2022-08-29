@@ -4,87 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController;
 
-class PostController extends Controller
+class PostController extends BaseController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    // public function index()
-    // {
-    //     $post = Post::all();
-    //     return response()->json([
-    //         'status' => true,
-    //         'post' => $posts,
-    //     ]);
-        
-    // }
-
+    public function index(Request $request)
+    {
+        $pageSize = $request->per_page;
+        $posts = Post::paginate($pageSize);
+        return $this->sendResponse($posts, 'success');
+    }
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the favourited resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function favouriteIndex()
     {
-        //
+        $posts = Post::where('favourited', '=', 1)->get();
+        return $this->sendResponse($posts, 'success');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Favourite a specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function favourite($id)
     {
-        //
+        Post::where('id', $id)->update(['favourited' => 1]);
+        $posts = Post::paginate(12);
+        return $this->sendResponse($posts, 'success');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Unfavourite a specified resource from storage.
      *
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function unfavourite($id)
     {
-        //
+        Post::where('id', $id)->update(['favourited' => 0]);
+        $posts = Post::where('favourited', '=', 1)->get();
+        return $this->sendResponse($posts, 'success');
     }
 }

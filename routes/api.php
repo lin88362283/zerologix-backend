@@ -33,12 +33,14 @@ use Illuminate\Support\Facades\Route;
 //     Route::post('/auth/login/email','login');
 // });
 
-Route::middleware('auth:sanctum')->group(function(){
-    Route::apiResource('post', PostController::class);
-    Route::get('/me/user/info',[AuthController::class,'checkMe']);
-    Route::post('/me/user/logout',[AuthController::class,'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::delete('/me/user/favourite/post-analysis/{id}', [PostController::class, 'unfavourite']);
+    Route::post('/me/user/favourite/post-analysis/{id}', [PostController::class, 'favourite']);
+    Route::get('/me/user/favourite/post-analysis', [PostController::class, 'favouriteIndex']);
+    Route::get('/me/user/info', [AuthController::class, 'checkMe']);
+    Route::post('/me/user/logout', [AuthController::class, 'logout']);
 });
 
-
-Route::post('/auth/login/email',[AuthController::class,'login']);
+Route::get('/post/analysis', [PostController::class, 'index']);
+Route::post('/auth/login/email', [AuthController::class, 'login']);
 // Route::post('/me/user/logout',AuthController::class,'logout');
