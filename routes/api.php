@@ -16,23 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::group(
-//     [
-//         'middleware' => 'auth:sanctum'
-//     ],
-//     function(){
-
-//     }
-// )
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::controller(AuthController::class)->group(function(){
-//     Route::post('/auth/login/email','login');
-// });
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/me/user/favourite/post-analysis/{id}', [PostController::class, 'unfavourite']);
     Route::post('/me/user/favourite/post-analysis/{id}', [PostController::class, 'favourite']);
@@ -43,4 +26,3 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/post/analysis', [PostController::class, 'index']);
 Route::post('/auth/login/email', [AuthController::class, 'login']);
-// Route::post('/me/user/logout',AuthController::class,'logout');
